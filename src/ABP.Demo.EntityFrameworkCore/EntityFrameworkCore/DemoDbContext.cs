@@ -1,3 +1,6 @@
+using ABP.Demo.Categories;
+using ABP.Demo.Configurations;
+using ABP.Demo.Products;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
@@ -57,6 +60,11 @@ public class DemoDbContext :
 
     #endregion
 
+    #region Models DbSet
+    public DbSet<Product> Produc { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    #endregion
+
     public DemoDbContext(DbContextOptions<DemoDbContext> options)
         : base(options)
     {
@@ -79,13 +87,10 @@ public class DemoDbContext :
         builder.ConfigureTenantManagement();
         builder.ConfigureBlobStoring();
         
-        /* Configure your own tables/entities inside here */
-
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(DemoConsts.DbTablePrefix + "YourEntities", DemoConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        // Models Configuration
+        builder.ApplyConfiguration(new ProductConfiguration());
+        builder.ApplyConfiguration(new CategoryConfiguration());
+      
+        
     }
 }
